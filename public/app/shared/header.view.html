@@ -1,0 +1,21 @@
+<h1>Replace with navbar</h1>
+
+<a ui-sref="app.home">Home</a>
+<span ng-hide="mainCtrl.isLoggedIn">
+  <a ui-sref="app.login">
+    Login
+  </a>
+  <a ui-sref="app.users.new">
+    Signup
+  </a>
+</span>
+<a ng-show="mainCtrl.isLoggedIn" ng-click="mainCtrl.doLogout()">
+  Logout
+</a>
+
+<br>
+Is logged in:
+<span ng-if="mainCtrl.isLoggedIn">Yes</span>
+<span ng-if="!mainCtrl.isLoggedIn">No</span>
+
+<i class="fa fa-file"></i>

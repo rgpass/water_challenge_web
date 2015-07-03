@@ -1,9 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" ng-app="eo">
 <head>
-  <title>Water Challenge</title>
+  <meta charset="UTF-8">
+  <title>8 ounce</title>
+
+  <!-- CSS libs -->
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.5/cerulean/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <!-- Animations -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css">
+
+  <!-- Angular files -->
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.14/angular-ui-router.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular-animate.js"></script>
+
+  <!-- Main Angular app files -->
+  <script src="/app/app.module.js"></script>
+  <script src="/app/app.routes.js"></script>
+  <script src="/app/main.controller.js"></script>
+
+  <!-- Components -->
+    <!-- Posts -->
+    <script src="app/components/posts/new.post.controller.js"></script>
+    <script src="app/components/posts/posts.controller.js"></script>
+    <!-- Users -->
+    <script src="app/components/users/users.service.js"></script>
+    <script src="app/components/users/new.user.controller.js"></script>
+    <script src="app/components/users/edit.user.controller.js"></script>
+    <script src="app/components/users/new.session.controller.js"></script>
+    
+  <!-- Shared -->
+    <!-- Header -->
+    <script src="/app/shared/header.controller.js"></script>
+    <script src="/app/shared/auth.service.js"></script>
 </head>
+
 <body>
-  <h1>yiss</h1>
+
+<div class="container" ng-controller="MainController as mainCtrl">
+  <div ui-view="header"></div>
+  <div ui-view="content"></div>
+</div>
+
 </body>
 </html>

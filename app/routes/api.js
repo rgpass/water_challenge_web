@@ -1,4 +1,7 @@
-var User = require('../models/user.js');
+var User      = require('../models/user.js'),
+  jwt         = require('jsonwebtoken'),
+  config      = require('../../config.js'),
+  superSecret = config.secret;
 
 module.exports = function (app, express) {
   // Set up instance of Express Router
@@ -7,6 +10,47 @@ module.exports = function (app, express) {
   // Test that env is set up
   apiRouter.get('/', function (req, res) {
     res.json({ message: 'API router is live!' });
+  });
+
+  apiRouter.post('/authenticate', function (req, res) {
+    User.findOne({
+      email: req.body.email
+    }).select('name email username password').exec(function (err, user) {
+      if (err) { throw err; }
+
+      // If no user found
+      if (!user) {
+        res.json({
+          success: false,
+          message: 'Authentication failed. User not found.'
+        })
+      } else if (user) {
+        // Undefined pw will give bCrypt an error
+        req.body.password = req.body.password || '';
+        var validPassword = user.comparePassword(req.body.password);
+
+        if (!validPassword) {
+          res.json({
+            success: false,
+            message: 'Authentication failed. Wrong password.'
+          })
+        } else {
+          var token = jwt.sign({
+            name: user.name,
+            username: user.username,
+            email: user.email
+          }, superSecret, {
+            expiresInMinutes: 1440 // 24 hrs
+          });
+
+          res.json({
+            success: true,
+            message: 'Enjoy your token!',
+            token: token
+          });
+        }
+      }
+    });
   });
 
   // Routes for /users
@@ -26,6 +70,7 @@ module.exports = function (app, express) {
       var user = new User();
 
       user.name     = req.body.name;
+      user.email    = req.body.email;
       user.username = req.body.username;
       user.password = req.body.password;
 
@@ -39,9 +84,47 @@ module.exports = function (app, express) {
           }
         }
 
-        res.json({ message: 'User created!' });
+        res.json({ success: true, message: 'User created!' });
       });
     });
+
+  // Middleware for all API requests that
+  // validates the token
+  apiRouter.use(function (req, res, next) {
+    console.log('Someone came to our app!');
+
+    // Accept token from POST params, URL params, or HTTP header
+    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+    if (token) {
+      // Verify secret and check expiration
+      jwt.verify(token, superSecret, function (err, decoded) {
+        if (err) {
+          return res.status(403).send({
+            success: false,
+            message: 'Failed to authenticate token.'
+          });
+        } else {
+          // If good, save to req for use in other routes
+          // decoded is the user as seen in the /api/me route.
+          req.decoded = decoded;
+
+          next(); // Can only move to next if verified
+        }
+      });
+    } else { // If no token
+      return res.status(403).send({ // 403 Forbidden
+        success: false,
+        message: 'No token provided.'
+      });
+    }
+  });
+
+  apiRouter.get('/test', function (req, res) {
+    res.json({ message: 'You passed!' })
+  });
+
+
 
   apiRouter.route('/users/:user_id')
     // GET /api/users/:user_id -- users#show
@@ -82,6 +165,10 @@ module.exports = function (app, express) {
         res.json({ message: 'Successfully deleted.' });
       });
     });
+
+  apiRouter.get('/me', function (req, res) {
+    res.send(req.decoded);
+  });
 
   return apiRouter;
 };
