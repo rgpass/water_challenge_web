@@ -1,1 +1,8 @@
 <h1>Replace with posts#index view</h1>
+
+<h3>List of all posts</h3>
+<ul>
+  <li ng-repeat="post in postsCtrl.posts">
+    Date done: <span eo-parse-date date="post.date"></span> -- Volume (oz): {{post.volume}} -- User... Email: {{post.user.email}}, Name: {{post.user.name}}, Username: {{post.user.username}}
+  </li>
+</ul>

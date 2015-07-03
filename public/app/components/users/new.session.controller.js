@@ -7,9 +7,11 @@
       ['$state', 'Auth', NewSessionController]);
 
   function NewSessionController($state, Auth) {
+
     var vm = this; //eslint-disable-line
 
     vm.doLogin = doLogin;
+    vm.loginDate = {};
     vm.processing = 0;
 
 

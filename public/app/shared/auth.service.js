@@ -11,8 +11,7 @@
       ['$window', AuthToken])
     .factory('Auth',
       ['$http', '$q', 'AuthToken', Auth])
-    .factory('AuthInterceptor',
-      ['$q', 'AuthToken', '$location'], AuthInterceptor)
+    .factory('AuthInterceptor', ['$q', 'AuthToken', '$location', AuthInterceptor]);
 
   function AuthToken($window) {
     var authTokenFactory = {
@@ -87,14 +86,15 @@
   }
 
   function AuthInterceptor($q, AuthToken, $location) {
-    var authInterceptorFactory = {
+    var interceptorFactory = {
       request: request,
       responseError: responseError
     };
-    return authInterceptorFactory;
+    return interceptorFactory;
 
 
     /***** UTILITY FUNCTIONS *****/
+    // Attach token to every request
     function request(config) {
       var token = AuthToken.getToken();
 
@@ -103,13 +103,14 @@
       return config;
     }
 
+    // Redirect if a token doesn't authenticate
     function responseError(response) {
-      if (response.status === 403) {  // Forbidden
+      if (response.status === 403) {  // 403 == Forbidden
         AuthToken.setToken();         // Clear token
-        $location.path('/login');     // Redirect to login
+        $location.path('/login');     // Redirect to login page
       }
 
-      // Return errors from server as a promise
+      // Return errors from the server as a promise
       return $q.reject(response);
     }
   }

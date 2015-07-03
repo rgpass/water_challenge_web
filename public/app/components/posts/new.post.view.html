@@ -1,1 +1,13 @@
-<h1>Replace with new post view</h1>
+<h1>Water Consumed (in ounces)</h1>
+
+<form ng-submit="newPostCtrl.save()">
+  <div class="form-group">
+    <label>Volume</label>
+    <input type="text" class="form-control" ng-model="newPostCtrl.volume">
+  </div>
+
+  <button type="submit" class="btn btn-block btn-primary">
+    <span ng-if="newPostCtrl.processing === 0">Save</span>
+    <span ng-if="newPostCtrl.processing > 0">Saving...</span>
+  </button>
+</form>

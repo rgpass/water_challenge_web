@@ -1,4 +1,5 @@
 var User      = require('../models/user.js'),
+  Post        = require('../models/post.js'),
   jwt         = require('jsonwebtoken'),
   config      = require('../../config.js'),
   superSecret = config.secret;
@@ -88,6 +89,15 @@ module.exports = function (app, express) {
       });
     });
 
+  apiRouter.route('/posts')
+    .get(function postsIndex(req, res) {
+      Post.find(function (err, posts) {
+        if (err) { res.send(err); }
+
+        res.json(posts);
+      });
+    })
+
   // Middleware for all API requests that
   // validates the token
   apiRouter.use(function (req, res, next) {
@@ -169,6 +179,45 @@ module.exports = function (app, express) {
   apiRouter.get('/me', function (req, res) {
     res.send(req.decoded);
   });
+
+  apiRouter.route('/posts')
+    .post(function postsCreate(req, res) {
+      console.log('*****************');
+      console.log(req);
+      console.log('*****************');
+
+      if (!req.decoded) {
+        console.log('No req decoded');
+        res.json({ success: false, message: 'No user info detected' });
+      } else {
+        var user = req.decoded,
+          post = new Post();
+
+        if (isNaN(Number(req.body.volume))) {
+          res.json({ success: false, message: 'Enter a number in ounces.'})
+        }
+
+        // Remove useless variables
+        user.iat = undefined;
+        user.exp = undefined;
+
+        post.volume = req.body.volume;
+        post.user = user;
+        post.date = Date.now();
+
+        console.log('*****************');
+        console.log(post);
+        console.log('*****************');
+
+        post.save(function (err) {
+          if (err) {
+            return res.send(err);
+          }
+
+          res.json({ success: true, message: 'Water tracked!', post: post })
+        });
+      }
+    })
 
   return apiRouter;
 };

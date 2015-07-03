@@ -21,10 +21,12 @@ angular
           url: '',
           views: {
             'new-post': {
-              templateUrl: 'app/components/posts/new.post.view.html'
+              templateUrl: 'app/components/posts/new.post.view.html',
+              controller: 'NewPostController as newPostCtrl'
             },
             'posts-index': {
-              templateUrl: 'app/components/posts/posts.view.html'
+              templateUrl: 'app/components/posts/posts.view.html',
+              controller: 'PostsController as postsCtrl'
             }
           }
         })
