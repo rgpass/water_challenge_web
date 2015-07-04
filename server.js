@@ -28,7 +28,10 @@ app.use(function (req, res, next) {
 // TODO: Set up Gulp to parse any reqs to this address to mongodb://localhost:27017/myDatabase
 // mongoose.connect(config.database);
 // For local testing:
-mongoose.connect('mongodb://localhost:27017/water_challenge');
+// mongoose.connect('mongodb://localhost:27017/water_challenge');
+mongoose.connect(process.env.MONGO_URI);
+console.log('Connected to db at...');
+console.log(process.env.MONGO_URI);
 
 // Log all reqs to console
 app.use(morgan('dev'));
