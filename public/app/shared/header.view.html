@@ -21,3 +21,8 @@ Is logged in:
 Note for J:
 Check out fontawesome.com -- huge library of icons. Here's an example of one:
 <i class="fa fa-fighter-jet"></i>
+
+<span ng-if="mainCtrl.isLoggedIn">
+  <h3>Current user info:</h3>
+  {{mainCtrl.user.name}} -- {{mainCtrl.user.email}} -- {{mainCtrl.user.username}}
+</span>

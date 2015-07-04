@@ -9,13 +9,3 @@ angular
     // Attach our auth interceptor to each http request
     $httpProvider.interceptors.push('AuthInterceptor');
   });
-
-// var app = angular.module('userApp', [
-//   'ngAnimate',
-//   'app.routes',
-//   // 'ui.router',
-//   'authService',
-//   'mainCtrl',
-//   'userCtrl',
-//   'userService'
-// ])

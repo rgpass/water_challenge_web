@@ -9,9 +9,6 @@
     .module('app.auth', [])
     .factory('AuthToken',
       ['$window', AuthToken])
-    .factory('Auth',
-      ['$http', '$q', 'AuthToken', Auth])
-    .factory('AuthInterceptor', ['$q', 'AuthToken', '$location', AuthInterceptor]);
 
   function AuthToken($window) {
     var authTokenFactory = {
@@ -35,6 +32,13 @@
       }
     }
   }
+})();
+
+(function() {
+  angular
+    .module('app.auth')
+    .factory('Auth',
+      ['$http', '$q', 'AuthToken', Auth])
 
   function Auth($http, $q, AuthToken) {
     var authFactory = {
@@ -84,6 +88,12 @@
       AuthToken.setToken();
     }
   }
+})();
+
+(function() {
+  angular
+    .module('app.auth')
+    .factory('AuthInterceptor', ['$q', 'AuthToken', '$location', AuthInterceptor]);
 
   function AuthInterceptor($q, AuthToken, $location) {
     var interceptorFactory = {

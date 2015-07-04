@@ -17,8 +17,6 @@
       return $http.post(postsUrl, { volume: volume })
         .success(function handleCreateSuccess(data) {
           this.all.unshift(data.post);
-          console.log('Success');
-          console.log(data);
         }.bind(this))
         .error(function handleCreateError(data) {
           console.log('Failure');
@@ -30,8 +28,6 @@
       return $http.get(postsUrl)
         .success(function handleUpdateSuccess(data) {
           this.all = data.reverse();
-          console.log('Success');
-          console.log(data);
         }.bind(this))
         .error(function handleUpdateError(data) {
           console.log('Failure');

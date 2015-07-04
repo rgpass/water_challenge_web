@@ -157,7 +157,6 @@ module.exports = function (app, express) {
         if (req.body.username) { user.username = req.body.username; }
         if (req.body.password) { user.password = req.body.password; }
 
-        console.log(user);
         user.save(function(err) {
           if (err) { res.send(err); }
 
@@ -182,12 +181,8 @@ module.exports = function (app, express) {
 
   apiRouter.route('/posts')
     .post(function postsCreate(req, res) {
-      console.log('*****************');
-      console.log(req);
-      console.log('*****************');
 
       if (!req.decoded) {
-        console.log('No req decoded');
         res.json({ success: false, message: 'No user info detected' });
       } else {
         var user = req.decoded,
@@ -204,10 +199,6 @@ module.exports = function (app, express) {
         post.volume = req.body.volume;
         post.user = user;
         post.date = Date.now();
-
-        console.log('*****************');
-        console.log(post);
-        console.log('*****************');
 
         post.save(function (err) {
           if (err) {

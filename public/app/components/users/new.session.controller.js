@@ -8,6 +8,10 @@
 
   function NewSessionController($state, Auth) {
 
+    if (Auth.isLoggedIn()) {
+      $state.go('app.home');
+    }
+
     var vm = this; //eslint-disable-line
 
     vm.doLogin = doLogin;
@@ -21,7 +25,6 @@
       vm.errorMessage = '';
       Auth.login(vm.loginData.email, vm.loginData.password)
         .success(function handleLoginSuccess(data) {
-          console.log(data);
           vm.processing--;
 
           // If successful login

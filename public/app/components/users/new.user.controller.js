@@ -4,9 +4,13 @@
   angular
     .module('eo')
     .controller('NewUserController',
-      ['$state', 'User', NewUserController]);
+      ['$state', 'Auth', 'User', NewUserController]);
 
-  function NewUserController($state, User) {
+  function NewUserController($state, Auth, User) {
+
+    if (Auth.isLoggedIn()) {
+      $state.go('app.home');
+    }
 
     var vm = this; //eslint-disable-line
 
@@ -20,7 +24,7 @@
     function doSignup() {
       vm.processing++;
       vm.errorMessage = '';
-      console.log(vm.signupData);
+
       User.create(vm.signupData)
         .success(function handleLoginSuccess(data) {
           vm.processing--;
